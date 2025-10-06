@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # Next.js Application
+  huawei-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: huawei-ekit-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb+srv://websitedata0102_db_user:roygU3jcJBPOWfH4@huaweiekit.ascs3fq.mongodb.net/Huawei-ekit?retryWrites=true&w=majority&appName=huaweiekit
+      - ADMIN_USERNAME=admin_secure_2024
+      - ADMIN_PASSWORD=HuAwEi@eKit_UAE
+      - JWT_SECRET=95gGT9uPS4TmdMM3QlhFaWQo8bhlPpyhReTwdiDB1NWnxP9T5VFxqvBUaeTAvgl7Yc0DZ5SHsGVk9UbkA45tDV0S6bCNZhznqtJSwsolD9xOxZsANTDQ6dOoPQdTugJblKi9iSh9We0Wde8hlNxnPXIe0mb5XqsHM5HAuW1kxsVucbTdNfh0pCv0jD3JhLcV4Gb2FV0IJpuwpkRHEcHY6tisRJHEwPV2nqJoAR9DD1Zfj1E7ocdtqOunoXDvRtlBg07KX6ZeDRkvahObEmFttJdRdPDTOAkTVcsUtsz23q74CO9M19WNxwMwPZgWMGqu9LZF2ZjKONysTNXvnusk3I2q0NIHreom
+      - SESSION_EXPIRE_HOURS=24
+      - MAX_LOGIN_ATTEMPTS=5
+      - RATE_LIMIT_WINDOW_MS=900000
+      - RATE_LIMIT_MAX_REQUESTS=10
+      - CLOUDINARY_CLOUD_NAME=dwc6f1b3r
+      - CLOUDINARY_API_KEY=874437587471782
+      - CLOUDINARY_API_SECRET=J3k1v0bW8mYHkX9n7c6y5ZpX4Q
+    volumes:
+      - ./public/uploads:/app/public/uploads
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    networks:
+      - huawei-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MongoDB Database (Local Development)
+  mongodb:
+    image: mongo:7.0
+    container_name: huawei-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=HuAwEi_MongoDB_2024
+      - MONGO_INITDB_DATABASE=Huawei-ekit
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: unless-stopped
+    networks:
+      - huawei-network
+    command: mongod --auth
+
+  # Nginx Reverse Proxy (Optional for production)
+  nginx:
+    image: nginx:alpine
+    container_name: huawei-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - huawei-app
+    restart: unless-stopped
+    networks:
+      - huawei-network
+
+  # Redis (Optional for session storage and caching)
+  redis:
+    image: redis:7-alpine
+    container_name: huawei-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - huawei-network
+    command: redis-server --appendonly yes --requirepass "HuAwEi_Redis_2024"
+
+# Named volumes for data persistence
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+  redis_data:
+    driver: local
+
+# Network for inter-container communication
+networks:
+  huawei-network:
+    driver: bridge

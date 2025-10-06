@@ -1,0 +1,150 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js build output
+.next
+out
+build
+dist
+
+# Environment files (will be copied explicitly)
+.env
+.env.local
+.env.development
+.env.test
+# .env.production - we'll copy this explicitly
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+logs
+*.log
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js cache
+.next/
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git
+.gitignore
+README.md
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Testing
+.jest
+coverage/
+test/
+tests/
+**/*.test.js
+**/*.test.ts
+**/*.spec.js
+**/*.spec.ts
+
+# Deployment
+.vercel
+.netlify
+
+# Security
+.env.example
+*.key
+*.pem
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Local uploads (will be handled by volume mapping)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# TypeScript
+*.tsbuildinfo
+
+# ESLint
+.eslintcache
+
+# Miscellaneous
+.sass-cache/
+connect.lock
+typings/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Package lock files (copied separately)
+package-lock.json
+yarn.lock
+
+# Development database
+*.db
+*.sqlite
+*.sqlite3
+
+# Local configuration
+.env.local.example
+.env.development.example
