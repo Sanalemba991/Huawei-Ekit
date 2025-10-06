@@ -46,6 +46,7 @@ const Navbar = () => {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
   const [mounted, setMounted] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState<string | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
 
   // Helper function to determine if a nav item is active
   const isNavItemActive = (href: string) => {
@@ -99,7 +100,7 @@ const Navbar = () => {
             items: []
           }
         ],
-        links: [{ name: 'All Products', href: '/products', external: true }]
+        links: [{ name: 'All Products', href: '/products', external: false }]
       }
     },
     {
@@ -123,7 +124,7 @@ const Navbar = () => {
         
         // Log each category's status
         data.data.forEach((cat: NavbarCategory) => {
-          console.log(`/products/Category: ${cat.name}, Active: ${cat.isActive}, Slug: ${cat.slug}`);
+          console.log(`Category: ${cat.name}, Active: ${cat.isActive}, Slug: ${cat.slug}`);
         });
         
         // Sort categories by order
@@ -148,7 +149,7 @@ const Navbar = () => {
                 items: dynamicProductItems
               }
             ],
-            links: [{ name: 'All Products', href: '/products', external: true }]
+            links: [{ name: 'All Products', href: '/products', external: false }]
           }
         };
         
@@ -213,7 +214,8 @@ const Navbar = () => {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (activeDropdown && !(event.target as Element).closest('.dropdown-container')) {
+      const target = event.target as Element;
+      if (activeDropdown && !target.closest('.dropdown-container') && !target.closest('.dropdown-menu')) {
         setActiveDropdown(null);
       }
     };
@@ -231,7 +233,7 @@ const Navbar = () => {
     };
   }, [hoverTimeout]);
 
-  const handleDropdownToggle = (title: string) => {
+  const handleDropdownToggle = (title: string, event?: React.MouseEvent) => {
     if (isMobileMenuOpen) {
       // Mobile behavior - toggle on click
       setActiveDropdown(activeDropdown === title ? null : title);
@@ -242,10 +244,25 @@ const Navbar = () => {
         setHoverTimeout(null);
       }
       setActiveDropdown(title);
+      
+      // Calculate dropdown position for desktop
+      if (event) {
+        const button = event.currentTarget as HTMLElement;
+        const rect = button.getBoundingClientRect();
+        const navbar = button.closest('nav');
+        if (navbar) {
+          const navbarRect = navbar.getBoundingClientRect();
+          setDropdownPosition({
+            top: navbarRect.bottom,
+            left: navbarRect.left,
+            width: navbarRect.width
+          });
+        }
+      }
     }
   };
 
-  const handleDropdownMouseEnter = (title: string) => {
+  const handleDropdownMouseEnter = (title: string, event: React.MouseEvent) => {
     if (!isMobileMenuOpen) {
       if (hoverTimeout) {
         clearTimeout(hoverTimeout);
@@ -253,6 +270,19 @@ const Navbar = () => {
       }
       setActiveDropdown(title);
       setHoveredItem(title);
+      
+      // Calculate dropdown position
+      const button = event.currentTarget as HTMLElement;
+      const rect = button.getBoundingClientRect();
+      const navbar = button.closest('nav');
+      if (navbar) {
+        const navbarRect = navbar.getBoundingClientRect();
+        setDropdownPosition({
+          top: navbarRect.bottom,
+          left: navbarRect.left,
+          width: navbarRect.width
+        });
+      }
     }
   };
 
@@ -264,7 +294,7 @@ const Navbar = () => {
       const timeout = setTimeout(() => {
         setActiveDropdown(null);
         setHoveredItem(null);
-      }, 500); // 0.5 second delay
+      }, 300); // 0.3 second delay
       setHoverTimeout(timeout);
     }
   };
@@ -280,14 +310,18 @@ const Navbar = () => {
   const handleNavItemClick = () => {
     setActiveDropdown(null);
     setIsMobileMenuOpen(false);
+    setMobileDropdownOpen(null);
   };
 
   const handleLogoClick = () => {
     setActiveDropdown(null);
+    setMobileDropdownOpen(null);
   };
 
   const handleDropdownLinkClick = () => {
     setActiveDropdown(null);
+    setMobileDropdownOpen(null);
+    setIsMobileMenuOpen(false);
   };
 
   const handleMobileItemClick = (item: NavigationItem) => {
@@ -321,31 +355,33 @@ const Navbar = () => {
             {/* Contact Information Section */}
             <div className="flex items-center space-x-6">
               {/* Location */}
-              <Link
+              <a
                 href={contactInfo.location.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center space-x-1 text-white hover:text-gray-300 transition-colors duration-200 group"
               >
                 <MapPinIcon className="w-4 h-4" />
-              
-              </Link>
+                <span className="hidden sm:inline">Our Location</span>
+              </a>
 
               {/* Phone */}
-              <Link
+              <a
                 href={contactInfo.phone.href}
                 className="flex items-center space-x-1 text-white hover:text-gray-300 transition-colors duration-200 group"
               >
                 <PhoneIcon className="w-4 h-4" />
-            
-              </Link>
+                <span className="hidden sm:inline">{contactInfo.phone.description}</span>
+              </a>
 
               {/* Email */}
-              <Link
+              <a
                 href={contactInfo.email.href}
                 className="flex items-center space-x-1 text-white hover:text-gray-300 transition-colors duration-200 group"
               >
                 <EnvelopeIcon className="w-4 h-4" />
-               
-              </Link>
+                <span className="hidden sm:inline">Email Us</span>
+              </a>
             </div>
           </div>
         </div>
@@ -381,8 +417,8 @@ const Navbar = () => {
                 <div key={item.title} className="relative dropdown-container">
                   {item.dropdownContent ? (
                     <button
-                      onClick={() => handleDropdownToggle(item.title)}
-                      onMouseEnter={() => handleDropdownMouseEnter(item.title)}
+                      onClick={(e) => handleDropdownToggle(item.title, e)}
+                      onMouseEnter={(e) => handleDropdownMouseEnter(item.title, e)}
                       onMouseLeave={handleDropdownMouseLeave}
                       className={`navbar-item flex items-center space-x-1 px-3 py-2 text-sm font-medium transition-colors duration-200 relative ${
                         isNavItemActive(item.href) || activeDropdown === item.title || hoveredItem === item.title
@@ -428,9 +464,18 @@ const Navbar = () => {
                   {/* Dropdown Menu */}
                   {activeDropdown === item.title && item.dropdownContent && (
                     <div
-                      className="dropdown-menu fixed left-0 w-full bg-white shadow-xl z-50 border-t border-gray-200 dropdown-enter navbar-dropdown"
-                      style={{ top: isScrolled ? '64px' : '104px' }}
-                      onMouseEnter={() => handleDropdownMouseEnter(item.title)}
+                      className="dropdown-menu fixed bg-white shadow-xl z-50 border-t border-gray-200 dropdown-enter navbar-dropdown"
+                      style={{
+                        top: dropdownPosition.top,
+                        left: dropdownPosition.left,
+                        width: dropdownPosition.width
+                      }}
+                      onMouseEnter={() => {
+                        if (hoverTimeout) {
+                          clearTimeout(hoverTimeout);
+                          setHoverTimeout(null);
+                        }
+                      }}
                       onMouseLeave={handleDropdownMouseLeave}
                     >
                       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -455,7 +500,7 @@ const Navbar = () => {
                           ))}
                         </div>
 
-                        {item.dropdownContent.links && (
+                        {item.dropdownContent.links && item.dropdownContent.links.length > 0 && (
                           <div className="mt-8 pt-6 border-t border-gray-200">
                             <div className="flex flex-wrap gap-6">
                               {item.dropdownContent.links.map((link, linkIndex) => (
@@ -494,7 +539,13 @@ const Navbar = () => {
             {/* Search and Mobile Menu */}
             <div className="flex items-center space-x-4">
               {/* Search */}
-            
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="p-2 text-gray-600 hover:text-red-600 transition-colors duration-200"
+                aria-label="Search"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </button>
 
               {/* Mobile Menu Button */}
               <button
@@ -596,7 +647,7 @@ const Navbar = () => {
                       ))}
                       
                       {/* Mobile Dropdown Bottom Links */}
-                      {item.dropdownContent.links && (
+                      {item.dropdownContent.links && item.dropdownContent.links.length > 0 && (
                         <div className="pt-3 border-t border-gray-200 mt-4">
                           {item.dropdownContent.links.map((link, linkIndex) => (
                             <Link
@@ -676,6 +727,11 @@ const Navbar = () => {
         /* Hover effects */
         .group:hover .group-hover\:translate-x-1 {
           transform: translateX(0.25rem);
+        }
+
+        /* Prevent body scroll when mobile menu is open */
+        body.mobile-menu-open {
+          overflow: hidden;
         }
       `}</style>
     </>
