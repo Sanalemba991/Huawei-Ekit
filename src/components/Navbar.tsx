@@ -539,13 +539,7 @@ const Navbar = () => {
             {/* Search and Mobile Menu */}
             <div className="flex items-center space-x-4">
               {/* Search */}
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-gray-600 hover:text-red-600 transition-colors duration-200"
-                aria-label="Search"
-              >
-                <MagnifyingGlassIcon className="w-5 h-5" />
-              </button>
+              
 
               {/* Mobile Menu Button */}
               <button
