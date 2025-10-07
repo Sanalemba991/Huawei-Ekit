@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Variants } from 'framer-motion';
-
+import Image from 'next/image';
 interface SubCategory {
   _id: string;
   name: string;
@@ -93,12 +93,20 @@ export default function CategorySubCategoriesClient({ data }: CategorySubCategor
         className="relative overflow-hidden"
       >
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
-          <div className="absolute inset-0 opacity-10" style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '40px 40px'
-          }}></div>
-        </div>
+                 <Image
+                   src="/banner/first.jpg"
+                   alt="Products Banner"
+                   fill
+                   className="object-cover"
+                   priority
+                   quality={90}
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
+                 <div className="absolute inset-0 opacity-10" style={{
+                   backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+             
+                 }}></div>
+               </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <motion.div
@@ -117,7 +125,9 @@ export default function CategorySubCategoriesClient({ data }: CategorySubCategor
               <div className="flex items-center space-x-2 text-sm text-gray-300">
                 <Link href="/" className="hover:text-white transition-colors duration-200">Home</Link>
                 <span>→</span>
-                <Link href={`/${navbarCategory.slug}`} className="hover:text-white transition-colors duration-200">
+                <Link href="/products" className="hover:text-white transition-colors duration-200">Products</Link>
+                <span>→</span>
+                <Link href={`/products/${navbarCategory.slug}`} className="hover:text-white transition-colors duration-200">
                   {navbarCategory.name}
                 </Link>
                 <span>→</span>
@@ -174,43 +184,10 @@ export default function CategorySubCategoriesClient({ data }: CategorySubCategor
         </div>
       </motion.div>
 
-      {/* Main Content Section */}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Search Bar - Only show if there are subcategories */}
-        {subcategories.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.6 }}
-            className="mb-8 max-w-xl mx-auto"
-          >
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search subcategories..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-10 pr-8 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-white shadow-sm"
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-gray-600 transition-colors duration-200"
-                >
-                  <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          </motion.div>
-        )}
+        
+        
 
         {/* SubCategories Grid Header */}
         <motion.div
@@ -281,15 +258,7 @@ export default function CategorySubCategoriesClient({ data }: CategorySubCategor
                       )}
 
                       {/* Status Badge */}
-                      <div className="absolute top-2 right-2">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${
-                          subcategory.isActive
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'
-                          }`}>
-                          {subcategory.isActive ? '✓' : '✗'}
-                        </span>
-                      </div>
+                      
                     </motion.div>
 
                     {/* Content Container */}

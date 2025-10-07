@@ -26,14 +26,14 @@ export default function Contact() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       console.log('Submitting form data:', formData);
-      
+
       const response = await fetch('/api/contacts', {
         method: 'POST',
         headers: {
@@ -69,10 +69,10 @@ export default function Contact() {
   };
 
   // Animation variants for consistent timing
-  const slideUp : Variants= {
+  const slideUp: Variants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.8,
@@ -81,10 +81,10 @@ export default function Contact() {
     }
   };
 
-  const slideInLeft : Variants= {
+  const slideInLeft: Variants = {
     hidden: { opacity: 0, x: -50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
       transition: {
         duration: 0.8,
@@ -93,10 +93,10 @@ export default function Contact() {
     }
   };
 
-  const slideInRight : Variants= {
+  const slideInRight: Variants = {
     hidden: { opacity: 0, x: 50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
       transition: {
         duration: 0.8,
@@ -105,10 +105,10 @@ export default function Contact() {
     }
   };
 
-  const scaleIn: Variants={
+  const scaleIn: Variants = {
     hidden: { opacity: 0, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
       transition: {
         duration: 1,
@@ -173,8 +173,11 @@ export default function Contact() {
             filter: 'brightness(0.8)'
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-red-500/40 to-red-800/60" />
-
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
+                          <div className="absolute inset-0 opacity-10" style={{
+                            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                      
+                          }}></div>
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -185,16 +188,15 @@ export default function Contact() {
               animate="visible"
               className="text-white"
             >
-              <h1 className="text-5xl font-bold mb-6">
-                Kickstart your
+              <h1 className="text-5xl font-bold mb-6 leading-tight">
                 <br />
-                <span className="text-red-600">digital journey</span>
-                <br />
-                today
+                HUAWEI<span className="text-red-600"> eKit</span> UAE <br />
+                 Join the Distribution Network
               </h1>
               <p className="text-xl text-red-100">
-                Please fill in the requirements and we will get back to you soon.
+                Fill out the form and we will reach out to discuss how we can collaborate.
               </p>
+
             </motion.div>
 
             {/* Right Side - Form */}
@@ -218,7 +220,7 @@ export default function Contact() {
                     className="w-full px-4 py-3 bg-white/15 rounded-xl text-white placeholder-white/80 resize-none border border-transparent focus:border-red-400 focus:outline-none transition-colors duration-300"
                     required
                   />
-                  
+
                   {/* Email */}
                   <motion.input
                     whileFocus={{ scale: 1.02 }}
@@ -231,7 +233,7 @@ export default function Contact() {
                     className="w-full px-4 py-3 bg-white/15 rounded-xl text-white placeholder-white/80 resize-none border border-transparent focus:border-red-400 focus:outline-none transition-colors duration-300"
                     required
                   />
-                  
+
                   {/* Phone */}
                   <motion.input
                     whileFocus={{ scale: 1.02 }}
@@ -244,7 +246,7 @@ export default function Contact() {
                     className="w-full px-4 py-3 bg-white/15 rounded-xl text-white placeholder-white/80 resize-none border border-transparent focus:border-red-400 focus:outline-none transition-colors duration-300"
                     required
                   />
-                  
+
                   {/* Company */}
                   <motion.input
                     whileFocus={{ scale: 1.02 }}
@@ -256,7 +258,7 @@ export default function Contact() {
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-white/15 rounded-xl text-white placeholder-white/80 resize-none border border-transparent focus:border-red-400 focus:outline-none transition-colors duration-300"
                   />
-                  
+
                   {/* Service */}
                   <motion.select
                     whileFocus={{ scale: 1.02 }}
@@ -276,7 +278,7 @@ export default function Contact() {
                     <option value="Partnership" className="bg-gray-800 text-white">Partnership</option>
                     <option value="Other" className="bg-gray-800 text-white">Other</option>
                   </motion.select>
-                  
+
                   {/* Subject */}
                   <motion.input
                     whileFocus={{ scale: 1.02 }}
@@ -289,7 +291,7 @@ export default function Contact() {
                     className="w-full px-4 py-3 bg-white/15 rounded-xl text-white placeholder-white/80 resize-none border border-transparent focus:border-red-400 focus:outline-none transition-colors duration-300"
                     required
                   />
-                  
+
                   {/* Message */}
                   <motion.textarea
                     whileFocus={{ scale: 1.02 }}
@@ -302,15 +304,15 @@ export default function Contact() {
                     className="w-full px-4 py-3 bg-white/15 rounded-xl text-white placeholder-white/80 resize-none border border-transparent focus:border-red-400 focus:outline-none transition-colors duration-300"
                     required
                   />
-                  
+
                   {/* Response Time Notice */}
                   <div className="text-center text-white/80 text-sm">
                     We'll respond within 24 hours
                   </div>
-                  
+
                   {/* Submit Button */}
                   <motion.button
-                    whileHover={{ 
+                    whileHover={{
                       scale: isSubmitting ? 1 : 1.05,
                       backgroundColor: "#dc2626",
                       color: "#ffffff",
@@ -330,14 +332,14 @@ export default function Contact() {
           </div>
 
           {/* Contact Info */}
-          <motion.div 
+          <motion.div
             variants={slideUp}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.2 }}
             className="mt-16 grid md:grid-cols-3 gap-8 text-white text-center"
           >
-            <motion.div 
+            <motion.div
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
               className="transition-transform duration-300 cursor-pointer"
@@ -358,7 +360,7 @@ export default function Contact() {
               </a>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
               className="transition-transform duration-300"
@@ -370,7 +372,7 @@ export default function Contact() {
               </p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
               className="transition-transform duration-300 space-y-2"

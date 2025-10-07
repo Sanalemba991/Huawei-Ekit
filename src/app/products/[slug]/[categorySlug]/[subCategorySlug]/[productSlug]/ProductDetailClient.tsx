@@ -140,13 +140,27 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             const contentWidth = pageWidth - (2 * margin);
             let yPosition = margin;
 
-            // Add header with brand styling
-            pdf.setFillColor(239, 68, 68); // Red-500
+            // Add header with brand styling and logo
+            pdf.setFillColor(0.27, 0.27, 0.27, 0.5) // Red-500
             pdf.rect(0, 0, pageWidth, 30, 'F');
+
+            // Add Huawei logo
+            try {
+                const logoData = await getImageDataUrl('/huaweilogo-new.png');
+                const logoWidth = 40; // Adjust as needed
+                const logoHeight = 15; // Adjust as needed
+                const logoX = margin;
+                const logoY = 7.5; // Center vertically in header
+                pdf.addImage(logoData, 'PNG', logoX, logoY, logoWidth, logoHeight);
+            } catch (logoError) {
+                console.warn('Failed to add logo to PDF:', logoError);
+            }
+
+            // Add title next to logo
             pdf.setTextColor(255, 255, 255);
             pdf.setFontSize(24);
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Product Specification', pageWidth / 2, 20, { align: 'center' });
+            pdf.text('Product Specification', pageWidth / 2 + 20, 20, { align: 'center' });
 
             yPosition = 45;
 
@@ -221,14 +235,16 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     yPosition = margin;
                 }
 
+                // Keep "Key Features" heading in red
                 pdf.setFontSize(12);
                 pdf.setFont('helvetica', 'bold');
                 pdf.setTextColor(239, 68, 68); // Red-500
                 pdf.text('Key Features', margin, yPosition);
                 yPosition += 8;
 
+                // Set features text to black
                 pdf.setFont('helvetica', 'normal');
-                pdf.setTextColor(55, 65, 81); // Gray-700
+                pdf.setTextColor(31, 41, 55); // Gray-800 for black text
                 pdf.setFontSize(10);
 
                 product.keyFeatures.forEach((feature, index) => {
@@ -237,10 +253,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                         yPosition = margin;
                     }
 
-                    // Add bullet point
+                    // Add bullet point in black
+                    pdf.setFillColor(31, 41, 55); // Gray-800 for black bullet point
                     pdf.circle(margin + 2, yPosition - 1.5, 1, 'F');
 
-                    // Add feature text
+                    // Add feature text in black (already set above)
                     const featureLines = pdf.splitTextToSize(feature, contentWidth - 8);
                     pdf.text(featureLines, margin + 8, yPosition);
                     yPosition += (featureLines.length * 5) + 3;
@@ -404,15 +421,18 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
                         <span className="text-gray-400">→</span>
-                        <Link href={`/${product.navbarCategory.slug}`} className="hover:text-red-600 transition-colors">
+                        <Link href="/products" className="hover:text-red-600 transition-colors">Products</Link>
+                        <span className="text-gray-400">→</span>
+
+                        <Link href={`/products/${product.navbarCategory.slug}`} className="hover:text-red-600 transition-colors">
                             {product.navbarCategory.name}
                         </Link>
                         <span className="text-gray-400">→</span>
-                        <Link href={`/${product.navbarCategory.slug}/${product.category.slug}`} className="hover:text-red-600 transition-colors">
+                        <Link href={`/products/${product.navbarCategory.slug}/${product.category.slug}`} className="hover:text-red-600 transition-colors">
                             {product.category.name}
                         </Link>
                         <span className="text-gray-400">→</span>
-                        <Link href={`/${product.navbarCategory.slug}/${product.category.slug}/${product.subcategory.slug}`} className="hover:text-red-600 transition-colors">
+                        <Link href={`/products/${product.navbarCategory.slug}/${product.category.slug}/${product.subcategory.slug}`} className="hover:text-red-600 transition-colors">
                             {product.subcategory.name}
                         </Link>
                         <span className="text-gray-400">→</span>
@@ -616,7 +636,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                         </div>
 
                         {/* Right: Product Information */}
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {/* Product Description Section */}
                             <motion.div
                                 initial={{ opacity: 0, y: 8 }}
@@ -639,16 +659,12 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                             {product.keyFeatures.map((feature, index) => (
                                 <motion.div
                                     key={index}
-                                    className="flex items-start space-x-3  px-1 rounded-lg hover:bg-gray-50 transition-colors"
+                                    className="flex items-start gap-1.5 px-1 rounded-lg hover:bg-gray-50 transition-colors"
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.05 + 0.3 }}
                                 >
-                                    <div className="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center mt-0.5">
-                                        <svg className="w-3 h-3 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
+                                    <div className="flex-shrink-0 w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5"></div>
                                     <span className="text-gray-700 leading-tight text-sm flex-1">{feature}</span>
                                 </motion.div>
                             ))}

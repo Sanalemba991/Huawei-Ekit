@@ -124,7 +124,7 @@ const ProductsPage = () => {
       >
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/products-banner.jpg"
+            src="/banner/first.jpg"
             alt="Products Banner"
             fill
             className="object-cover"
@@ -134,7 +134,7 @@ const ProductsPage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
           <div className="absolute inset-0 opacity-10" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '40px 40px'
+          
           }}></div>
         </div>
 
@@ -168,70 +168,153 @@ const ProductsPage = () => {
       </motion.div>
 
       {/* Product Categories Section */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <motion.h2 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Section Header */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-16"
+          className="text-center mb-8"
         >
-          Product <span className='text-red-600'>categories</span>
-        </motion.h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            Our <span className="text-red-600">Product Categories</span>
+          </h2>
+          <p className="text-gray-600">
+            Discover our comprehensive range of solutions tailored to meet your needs
+          </p>
+        </motion.div>
 
         {categoryGroups.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
-            {categoryGroups.map((group, groupIndex) =>
-              group.categories.map((category, categoryIndex) => {
-                const cardIndex = categoryGroups
-                  .slice(0, groupIndex)
-                  .reduce((sum, g) => sum + g.categories.length, 0) + categoryIndex;
-                
-                return (
-                  <motion.div
-                    key={category._id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: cardIndex * 0.1 
-                    }}
-                    className="flex justify-center"
-                  >
-                    <Link
-                      href={`/products/${group.navbarCategory.slug}`}
-                      className="block bg-white rounded-2xl border-2 border-gray-200 hover:border-red-500 hover:shadow-2xl transition-all duration-300 overflow-hidden group w-full max-w-sm"
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.1 }
+              }
+            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {categoryGroups.map(group =>
+              group.categories.map(category => (
+                <motion.div
+                  key={category._id}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.6,
+                        ease: "easeOut"
+                      }
+                    }
+                  }}
+                  className="group"
+                >
+                  <div className="bg-white rounded-xl border border-gray-200 hover:border-red-400 hover:shadow-lg transition-all duration-300 overflow-hidden h-full flex flex-col">
+                    {/* Image Container */}
+                    <motion.div
+                      className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4 overflow-hidden"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <div className="relative h-64 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-10">
-                        {category.image ? (
-                          <Image 
-                            src={category.image} 
+                      {category.image ? (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5 }}
+                          className="relative w-full h-full flex items-center justify-center"
+                        >
+                          <Image
+                            src={category.image}
                             alt={category.name}
                             fill
-                            className="object-contain p-8 group-hover:scale-110 transition-transform duration-300"
+                            className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
                           />
-                        ) : (
-                          <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center text-gray-500 font-bold text-4xl shadow-inner">
-                            {category.name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5 }}
+                          className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl shadow-inner group-hover:from-red-600 group-hover:to-red-700 transition-all duration-300"
+                        >
+                          {category.name.charAt(0).toUpperCase()}
+                        </motion.div>
+                      )}
+                    </motion.div>
+
+                    {/* Content Container */}
+                    <div className="p-4 flex-1 flex flex-col">
+                      <h3 className="text-base font-semibold text-gray-900 group-hover:text-red-600 transition-colors mb-2 line-clamp-2 leading-tight">
+                        {category.name}
+                      </h3>
+
+                      {category.description && (
+                        <p className="text-gray-600 text-xs leading-relaxed line-clamp-2 mb-3 flex-1">
+                          {category.description}
+                        </p>
+                      )}
+
+                      {/* Action Button */}
+                      <div className="flex justify-center">
+                        <Link
+                          href={`/products/${group.navbarCategory.slug}/${category.slug}`}
+                          className="mt-auto"
+                        >
+                          <motion.div
+                            className="inline-flex items-center text-red-600 font-medium text-xs group-hover:gap-1 transition-all duration-300"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <span>View Products</span>
+                            <svg
+                              className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </motion.div>
+                        </Link>
                       </div>
-                      <div className="p-6 text-center bg-white">
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2">
-                          {category.name}
-                        </h3>
-                      </div>
-                    </Link>
-                  </motion.div>
-                );
-              })
+                    </div>
+                  </div>
+                </motion.div>
+              ))
             )}
-          </div>
+          </motion.div>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-gray-600 text-lg">No products available yet.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center py-20"
+          >
+            <div className="max-w-md mx-auto">
+              <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">No Categories Available</h3>
+              <p className="text-gray-600 mb-6">There are currently no categories available.</p>
+            </div>
+          </motion.div>
         )}
       </div>
     </div>

@@ -115,21 +115,21 @@ const Navbar = () => {
     try {
       const response = await fetch('/api/admin/navbar-categories');
       const data = await response.json();
-      
+
       console.log('Navbar API response:', data);
       console.log('Categories received:', data.data);
-      
+
       if (data.success && data.data && data.data.length > 0) {
         setNavbarCategories(data.data);
-        
+
         // Log each category's status
         data.data.forEach((cat: NavbarCategory) => {
           console.log(`Category: ${cat.name}, Active: ${cat.isActive}, Slug: ${cat.slug}`);
         });
-        
+
         // Sort categories by order
         const sortedCategories = [...data.data].sort((a, b) => a.order - b.order);
-        
+
         // Create dynamic product items from categories
         const dynamicProductItems = sortedCategories
           .filter((category: NavbarCategory) => category.isActive)
@@ -137,7 +137,7 @@ const Navbar = () => {
             title: category.name,
             href: `/products/${category.slug}`
           }));
-        
+
         // Create the Products dropdown with dynamic categories
         const productsDropdown: NavigationItem = {
           title: 'Products',
@@ -152,7 +152,7 @@ const Navbar = () => {
             links: [{ name: 'All Products', href: '/products', external: false }]
           }
         };
-        
+
         // Create navigation items: Home + Products (with dynamic dropdown) + Contact Us only
         const navigationItems: NavigationItem[] = [
           {
@@ -244,7 +244,7 @@ const Navbar = () => {
         setHoverTimeout(null);
       }
       setActiveDropdown(title);
-      
+
       // Calculate dropdown position for desktop
       if (event) {
         const button = event.currentTarget as HTMLElement;
@@ -270,7 +270,7 @@ const Navbar = () => {
       }
       setActiveDropdown(title);
       setHoveredItem(title);
-      
+
       // Calculate dropdown position
       const button = event.currentTarget as HTMLElement;
       const rect = button.getBoundingClientRect();
@@ -347,9 +347,8 @@ const Navbar = () => {
   return (
     <>
       {/* Top Navigation Bar - Always visible but hidden when scrolled */}
-      <div className={`bg-gray-900 text-white text-sm transition-all duration-300 ${
-        isScrolled ? 'h-0 overflow-hidden' : 'h-10'
-      }`}>
+      <div className={`bg-gray-900 text-white text-sm transition-all duration-300 ${isScrolled ? 'h-0 overflow-hidden' : 'h-10'
+        }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-end items-center h-10">
             {/* Contact Information Section */}
@@ -362,7 +361,7 @@ const Navbar = () => {
                 className="flex items-center space-x-1 text-white hover:text-red-300 transition-colors duration-200 group"
               >
                 <MapPinIcon className="w-4 h-4" />
-   
+
               </a>
 
               {/* Phone */}
@@ -371,7 +370,7 @@ const Navbar = () => {
                 className="flex items-center space-x-1 text-white hover:text-red-300 transition-colors duration-200 group"
               >
                 <PhoneIcon className="w-4 h-4" />
-             
+
               </a>
 
               {/* Email */}
@@ -380,7 +379,7 @@ const Navbar = () => {
                 className="flex items-center space-x-1 text-white hover:text-red-300 transition-colors duration-200 group"
               >
                 <EnvelopeIcon className="w-4 h-4" />
-              
+
               </a>
             </div>
           </div>
@@ -389,9 +388,8 @@ const Navbar = () => {
 
       {/* Main Navigation - Becomes fixed when scrolled */}
       <nav
-        className={`w-full bg-white shadow-sm border-b border-gray-200 transition-all duration-300 ${
-          isScrolled ? 'fixed top-0 left-0 right-0 z-50 shadow-lg' : 'relative'
-        }`}
+        className={`w-full bg-white shadow-sm border-b border-gray-200 transition-all duration-300 ${isScrolled ? 'fixed top-0 left-0 right-0 z-50 shadow-lg' : 'relative'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -404,9 +402,8 @@ const Navbar = () => {
                   width={isScrolled ? 100 : 120}
                   height={isScrolled ? 30 : 40}
                   priority
-                  className={`transition-all duration-300 ${
-                    isScrolled ? 'h-6 w-auto' : 'h-8 w-auto'
-                  }`}
+                  className={`transition-all duration-300 ${isScrolled ? 'h-6 w-auto' : 'h-8 w-auto'
+                    }`}
                 />
               </Link>
             </div>
@@ -420,21 +417,19 @@ const Navbar = () => {
                       onClick={(e) => handleDropdownToggle(item.title, e)}
                       onMouseEnter={(e) => handleDropdownMouseEnter(item.title, e)}
                       onMouseLeave={handleDropdownMouseLeave}
-                      className={`navbar-item flex items-center space-x-1 px-3 py-2 text-sm font-medium transition-colors duration-200 relative ${
-                        isNavItemActive(item.href) || activeDropdown === item.title || hoveredItem === item.title
+                      className={`navbar-item flex items-center space-x-1 px-3 py-2 text-sm font-medium transition-colors duration-200 relative ${isNavItemActive(item.href) || activeDropdown === item.title || hoveredItem === item.title
                           ? 'text-red-600'
                           : 'text-gray-700 hover:text-red-600'
-                      }`}
+                        }`}
                     >
                       <span>{item.title}</span>
                       <ChevronDownIcon className="w-4 h-4" />
                       {/* Active/Hover Underline */}
                       <div
-                        className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-all duration-200 ${
-                          isNavItemActive(item.href) || activeDropdown === item.title || hoveredItem === item.title
+                        className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-all duration-200 ${isNavItemActive(item.href) || activeDropdown === item.title || hoveredItem === item.title
                             ? 'opacity-100 scale-x-100'
                             : 'opacity-0 scale-x-0'
-                        }`}
+                          }`}
                       />
                     </button>
                   ) : (
@@ -443,20 +438,18 @@ const Navbar = () => {
                       onClick={handleNavItemClick}
                       onMouseEnter={() => handleNavItemMouseEnter(item.title)}
                       onMouseLeave={handleNavItemMouseLeave}
-                      className={`navbar-item flex items-center space-x-1 px-3 py-2 text-sm font-medium transition-colors duration-200 relative ${
-                        isNavItemActive(item.href) || hoveredItem === item.title
+                      className={`navbar-item flex items-center space-x-1 px-3 py-2 text-sm font-medium transition-colors duration-200 relative ${isNavItemActive(item.href) || hoveredItem === item.title
                           ? 'text-red-600'
                           : 'text-gray-700 hover:text-red-600'
-                      }`}
+                        }`}
                     >
                       <span>{item.title}</span>
                       {/* Active/Hover Underline */}
                       <div
-                        className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-all duration-200 ${
-                          isNavItemActive(item.href) || hoveredItem === item.title
+                        className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-all duration-200 ${isNavItemActive(item.href) || hoveredItem === item.title
                             ? 'opacity-100 scale-x-100'
                             : 'opacity-0 scale-x-0'
-                        }`}
+                          }`}
                       />
                     </Link>
                   )}
@@ -508,22 +501,23 @@ const Navbar = () => {
                                   key={linkIndex}
                                   href={link.href}
                                   onClick={handleDropdownLinkClick}
-                                  className="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-200 group"
+                                  className="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-700 transition-all duration-300 ease-in-out group"
                                 >
                                   {link.name}
-                                  {link.external && (
-                                    <svg
-                                      className="w-3 h-3 ml-1 transform group-hover:translate-x-1 transition-transform duration-200"
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  )}
+                                  <svg
+                                    className="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                    />
+                                  </svg>
                                 </Link>
                               ))}
                             </div>
@@ -539,7 +533,7 @@ const Navbar = () => {
             {/* Search and Mobile Menu */}
             <div className="flex items-center space-x-4">
               {/* Search */}
-              
+
 
               {/* Mobile Menu Button */}
               <button
@@ -551,12 +545,11 @@ const Navbar = () => {
                 className="lg:hidden p-2 text-gray-600 hover:text-red-600 transition-colors duration-200"
                 aria-label="Toggle mobile menu"
               >
-                <svg 
-                  className={`w-6 h-6 transform transition-transform duration-200 ${
-                    isMobileMenuOpen ? 'rotate-90' : 'rotate-0'
-                  }`} 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className={`w-6 h-6 transform transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : 'rotate-0'
+                    }`}
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   {isMobileMenuOpen ? (
@@ -580,9 +573,8 @@ const Navbar = () => {
                     // Dropdown items - use button to toggle
                     <button
                       onClick={() => handleMobileItemClick(item)}
-                      className={`w-full flex items-center justify-between py-3 text-sm font-medium transition-colors duration-200 relative ${
-                        isNavItemActive(item.href) ? 'text-red-600' : 'text-gray-700 hover:text-red-600'
-                      }`}
+                      className={`w-full flex items-center justify-between py-3 text-sm font-medium transition-colors duration-200 relative ${isNavItemActive(item.href) ? 'text-red-600' : 'text-gray-700 hover:text-red-600'
+                        }`}
                     >
                       <span className="relative">
                         {item.title}
@@ -591,10 +583,9 @@ const Navbar = () => {
                           <div className="absolute bottom-[-4px] left-0 w-full h-0.5 bg-red-600" />
                         )}
                       </span>
-                      <ChevronDownIcon 
-                        className={`w-4 h-4 ml-2 transform transition-transform duration-200 ${
-                          mobileDropdownOpen === item.title ? 'rotate-180' : 'rotate-0'
-                        }`} 
+                      <ChevronDownIcon
+                        className={`w-4 h-4 ml-2 transform transition-transform duration-200 ${mobileDropdownOpen === item.title ? 'rotate-180' : 'rotate-0'
+                          }`}
                       />
                     </button>
                   ) : (
@@ -602,9 +593,8 @@ const Navbar = () => {
                     <Link
                       href={item.href}
                       onClick={() => handleMobileLinkClick(item.href)}
-                      className={`w-full flex items-center justify-between py-3 text-sm font-medium transition-colors duration-200 relative ${
-                        isNavItemActive(item.href) ? 'text-red-600' : 'text-gray-700 hover:text-red-600'
-                      }`}
+                      className={`w-full flex items-center justify-between py-3 text-sm font-medium transition-colors duration-200 relative ${isNavItemActive(item.href) ? 'text-red-600' : 'text-gray-700 hover:text-red-600'
+                        }`}
                     >
                       <span className="relative">
                         {item.title}
@@ -615,7 +605,7 @@ const Navbar = () => {
                       </span>
                     </Link>
                   )}
-                  
+
                   {/* Mobile Dropdown Content */}
                   {item.dropdownContent && mobileDropdownOpen === item.title && (
                     <div className="pb-4 pl-4 space-y-3 bg-gray-50 rounded-lg mt-2">
@@ -639,7 +629,7 @@ const Navbar = () => {
                           </ul>
                         </div>
                       ))}
-                      
+
                       {/* Mobile Dropdown Bottom Links */}
                       {item.dropdownContent.links && item.dropdownContent.links.length > 0 && (
                         <div className="pt-3 border-t border-gray-200 mt-4">
@@ -648,18 +638,23 @@ const Navbar = () => {
                               key={linkIndex}
                               href={link.href}
                               onClick={() => handleMobileLinkClick(link.href)}
-                              className="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-200 group"
+                              className="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-700 transition-all duration-300 ease-in-out group"
                             >
                               {link.name}
-                              {link.external && (
-                                <svg 
-                                  className="w-3 h-3 ml-1 transform group-hover:translate-x-1 transition-transform duration-200" 
-                                  fill="currentColor" 
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
-                              )}
+                              <svg
+                                className="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                />
+                              </svg>
                             </Link>
                           ))}
                         </div>
@@ -719,6 +714,11 @@ const Navbar = () => {
         }
         
         /* Hover effects */
+        .group:hover .group-hover\:translate-x-1 {
+          transform: translateX(0.25rem);
+        }
+
+        /* Arrow animation for dropdown links */
         .group:hover .group-hover\:translate-x-1 {
           transform: translateX(0.25rem);
         }
