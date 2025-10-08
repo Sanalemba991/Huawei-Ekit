@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Variants } from 'framer-motion';
-
+import Image from 'next/image';
 interface Product {
     _id: string;
     name: string;
@@ -95,12 +95,20 @@ export default function SubCategoryProductsClient({ data }: SubCategoryProductsC
                 className="relative overflow-hidden"
             >
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
-                    <div className="absolute inset-0 opacity-10" style={{
-                        backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-                        backgroundSize: '40px 40px'
-                    }}></div>
-                </div>
+                         <Image
+                           src="/banner/first.jpg"
+                           alt="Products Banner"
+                           fill
+                           className="object-cover"
+                           priority
+                           quality={90}
+                         />
+                         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
+                         <div className="absolute inset-0 opacity-10" style={{
+                           backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                     
+                         }}></div>
+                       </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
                     <motion.div
@@ -119,11 +127,13 @@ export default function SubCategoryProductsClient({ data }: SubCategoryProductsC
                             <div className="flex items-center space-x-2 text-sm text-gray-300">
                                 <Link href="/" className="hover:text-white transition-colors duration-200">Home</Link>
                                 <span>→</span>
-                                <Link href={`/${navbarCategory.slug}`} className="hover:text-white transition-colors duration-200">
+                                <Link href="/products" className="hover:text-white transition-colors duration-200">Products</Link>
+                                <span>→</span>
+                                <Link href={`/products/${navbarCategory.slug}`} className="hover:text-white transition-colors duration-200">
                                     {navbarCategory.name}
                                 </Link>
                                 <span>→</span>
-                                <Link href={`/${navbarCategory.slug}/${category.slug}`} className="hover:text-white transition-colors duration-200">
+                                <Link href={`/products/${navbarCategory.slug}/${category.slug}`} className="hover:text-white transition-colors duration-200">
                                     {category.name}
                                 </Link>
                                 <span>→</span>
@@ -165,14 +175,14 @@ export default function SubCategoryProductsClient({ data }: SubCategoryProductsC
                         >
                             <span>Part of</span>
                             <Link
-                                href={`/${navbarCategory.slug}/${category.slug}`}
+                                href={`/products/${navbarCategory.slug}/${category.slug}`}
                                 className="hover:text-white font-semibold transition-colors duration-200"
                             >
                                 {category.name}
                             </Link>
                             <span>in</span>
                             <Link
-                                href={`/${navbarCategory.slug}`}
+                                href={`/products/${navbarCategory.slug}`}
                                 className="hover:text-white font-semibold transition-colors duration-200"
                             >
                                 {navbarCategory.name}
@@ -184,8 +194,8 @@ export default function SubCategoryProductsClient({ data }: SubCategoryProductsC
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.6 }}
-                            className="mt-6 inline-flex items-center space-x-2 bg-green-600/20 backdrop-blur-sm text-green-300 px-4 py-2 rounded-full text-sm font-medium border border-green-400/30"
-                        >
+                           className="ml-2 mt-6 inline-flex items-center space-x-2 bg-transparent backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium border border-gray-600"
+>
                             <span>
                                 {products.length} {products.length === 1 ? 'Product' : 'Products'} Available
                             </span>
@@ -253,14 +263,7 @@ export default function SubCategoryProductsClient({ data }: SubCategoryProductsC
                                         </motion.div>
 
                                         {/* Status Badge */}
-                                        <div className="absolute top-2 right-2">
-                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${product.isActive
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-800'
-                                                }`}>
-                                                {product.isActive ? '✓' : '✗'}
-                                            </span>
-                                        </div>
+
 
                                         {/* Additional Images Preview */}
                                         {(product.image2 || product.image3 || product.image4) && (

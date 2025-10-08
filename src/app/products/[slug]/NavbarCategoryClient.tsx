@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import {Variants} from 'framer-motion';
+import { Variants } from 'framer-motion';
 
 interface NavbarCategory {
     _id: string;
@@ -42,7 +42,7 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
     const { navbarCategory, categories } = data;
 
     // Animation variants
-    const containerVariants : Variants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -52,7 +52,7 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
         }
     };
 
-    const itemVariants : Variants = {
+    const itemVariants: Variants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 1,
@@ -64,7 +64,7 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
         }
     };
 
-    const imageVariants : Variants = {
+    const imageVariants: Variants = {
         hidden: { opacity: 0, scale: 0.8 },
         visible: {
             opacity: 1,
@@ -85,13 +85,21 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
                 transition={{ duration: 0.8 }}
                 className="relative overflow-hidden"
             >
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
-                    <div className="absolute inset-0 opacity-10" style={{
-                        backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-                        backgroundSize: '40px 40px'
-                    }}></div>
-                </div>
+                 <div className="absolute inset-0 z-0">
+                          <Image
+                            src="/banner/first.jpg"
+                            alt="Products Banner"
+                            fill
+                            className="object-cover"
+                            priority
+                            quality={90}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-red-900/90"></div>
+                          <div className="absolute inset-0 opacity-10" style={{
+                            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                      
+                          }}></div>
+                        </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
                     <motion.div
@@ -100,6 +108,23 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="max-w-4xl"
                     >
+                        <motion.nav
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                            className="mb-4"
+                        >
+                            <div className="flex items-center space-x-2 text-sm text-gray-300">
+                                <Link href="/" className="hover:text-white transition-colors duration-200">Home</Link>
+                                <span>→</span>
+                                <Link href="/products" className="hover:text-white transition-colors duration-200">Products</Link>
+                                <span>→</span>
+                                <Link href={`/products/${navbarCategory.slug}`} className="hover:text-white transition-colors duration-200">
+                                    {navbarCategory.name}
+                                </Link>
+
+                            </div>
+                        </motion.nav>
                         <div className="inline-flex items-center px-4 py-2 bg-red-600/20 backdrop-blur-sm border border-red-400/30 rounded-full mb-6">
                             <span className="text-red-300 text-sm font-semibold tracking-wide">
                                 {navbarCategory.name.toUpperCase()}
@@ -198,11 +223,7 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
                                         )}
 
                                         {/* Status Badge */}
-                                        <div className="absolute top-2 right-2">
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                                                Active
-                                            </span>
-                                        </div>
+
                                     </motion.div>
 
                                     {/* Content Container */}
@@ -228,7 +249,7 @@ const NavbarCategoryClient: React.FC<NavbarCategoryClientProps> = ({ data }) => 
                                                     whileHover={{ scale: 1.02 }}
                                                     whileTap={{ scale: 0.98 }}
                                                 >
-                                                    <span>View Products</span>
+                                                    <span>View Sub Categories</span>
                                                     <svg
                                                         className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5"
                                                         fill="none"

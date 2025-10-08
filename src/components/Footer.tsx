@@ -1,30 +1,56 @@
-"use client";
-import React from 'react';
-import { MapPin, Mail, Phone, } from 'lucide-react';
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { MapPin, Mail, Phone } from 'lucide-react';
+import Image from 'next/image';
+
+interface NavbarCategory {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  order: number;
+  isActive: boolean;
+}
 
 const Footer = () => {
-  const footerSections = [
-    {
-      title: "Quick Links",
-      links: [
-        { name: "Home", href: "/" },
-        { name: "About Us", href: "/about" },
-        { name: "Products", href: "/products" },
-        { name: "Contact Us", href: "/contact" }
-      ]
-    },
-    {
-      title: "Products",
-      links: [
-        { name: "HUAWEI eKit", href: "/products/ekit" },
-        { name: "HUAWEI Camera", href: "/products/camera" },
-      ]
-    },
-    {
-      title: "Contact",
-      isContact: true
+  const [navbarCategories, setNavbarCategories] = useState<NavbarCategory[]>([]);
+  const [mounted, setMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Fetch navbar categories from API
+  const fetchNavbarCategories = useCallback(async () => {
+    try {
+      const response = await fetch('/api/admin/navbar-categories');
+      const data = await response.json();
+
+      console.log('Footer Navbar API response:', data);
+      console.log('Footer Categories received:', data.data);
+
+      if (data.success && data.data && data.data.length > 0) {
+        // Sort categories by order and filter active ones
+        const sortedCategories = [...data.data]
+          .filter((category: NavbarCategory) => category.isActive)
+          .sort((a, b) => a.order - b.order);
+
+        setNavbarCategories(sortedCategories);
+      }
+    } catch (error) {
+      console.error('Error fetching navbar categories in footer:', error);
     }
-  ];
+  }, []);
+
+  // Handle mounting to prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Fetch categories on mount
+  useEffect(() => {
+    if (mounted) {
+      fetchNavbarCategories();
+    }
+  }, [mounted, fetchNavbarCategories]);
 
   const contactInfo = [
     {
@@ -40,11 +66,37 @@ const Footer = () => {
     {
       icon: <Phone className="w-3.5 h-3.5" />,
       value: "+0097150966 4956",
-      url: "tel:+00971509664956" // Fixed: removed space from phone number
+      url: "tel:+00971509664956"
     }
   ];
 
- 
+  // Generate dynamic product links from categories - All Products will be last
+  const dynamicProductLinks = navbarCategories.map((category) => ({
+    name: category.name,
+    href: `/products/${category.slug}`
+  }));
+
+  const footerSections = [
+    {
+      title: "Quick Links",
+      links: [
+        { name: "Home", href: "/" },
+        { name: "About Us", href: "/about" },
+        { name: "Contact Us", href: "/contact" }
+      ]
+    },
+    {
+      title: "Products",
+      links: [
+        ...dynamicProductLinks, // Dynamic categories first
+        { name: "All Products", href: "/products" } // All Products last
+      ]
+    },
+    {
+      title: "Contact",
+      isContact: true
+    }
+  ];
 
   const handleInternalLink = (href: string) => {
     console.log(`Navigating to: ${href}`);
@@ -58,6 +110,10 @@ const Footer = () => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <footer className="bg-white border-t border-gray-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -66,8 +122,8 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Company Section */}
             <div className="space-y-4">
-              <div 
-                className="flex items-center cursor-pointer" 
+              <div
+                className="flex items-center cursor-pointer"
                 onClick={() => handleInternalLink("/")}
                 role="button"
                 tabIndex={0}
@@ -77,10 +133,17 @@ const Footer = () => {
                   }
                 }}
               >
-                <div className="w-8 h-6 bg-red-600 flex items-center justify-center rounded-sm">
-                  <span className="text-white font-bold text-xs">华为</span>
+                <div className=" justify-center w-full h-10  rounded-md p-2">
+                  <Image
+                    src="/huaweilogo-new.png"
+                    alt="Huawei Logo"
+                    width={120}
+                    height={40}
+                    priority
+                    className="object-contain transition-all duration-300 hover:scale-105"
+                  />
                 </div>
-                <span className="ml-2 text-xl font-bold text-gray-900">HUAWEI</span>
+
               </div>
 
               <p className="text-sm text-gray-600 leading-relaxed">
@@ -88,7 +151,7 @@ const Footer = () => {
               </p>
 
               {/* Social Media Icons */}
-              
+
             </div>
 
             {/* Footer Sections */}
@@ -97,7 +160,7 @@ const Footer = () => {
                 <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
                   {section.title}
                 </h3>
-                
+
                 {section.isContact ? (
                   <div className="space-y-3">
                     {contactInfo.map((contact, contactIndex) => (
@@ -123,7 +186,7 @@ const Footer = () => {
                   <ul className="space-y-2">
                     {section.links?.map((link, linkIndex) => (
                       <li key={linkIndex}>
-                        <button 
+                        <button
                           onClick={() => handleInternalLink(link.href)}
                           className="text-sm text-gray-600 hover:text-red-600 cursor-pointer transition-colors duration-200 text-left w-full text-start"
                           type="button"
@@ -145,17 +208,17 @@ const Footer = () => {
             <p className="text-xs text-gray-500">
               © 2025 Huawei Technologies Co., Ltd. All Rights Reserved.
             </p>
-            
+
             <div className="flex flex-wrap justify-center sm:justify-end items-center gap-3 text-xs ">
-              <button 
+              <button
                 onClick={() => handleInternalLink('/terms-of-service')}
                 className="text-gray-500 hover:text-red-600 transition-colors duration-200 cursor-pointer"
-                type="button" 
+                type="button"
               >
                 Terms of Service
-              </button> 
+              </button>
               <span className="text-gray-300">•</span>
-              <button 
+              <button
                 onClick={() => handleInternalLink('/privacy-policy')}
                 className="text-gray-500 hover:text-red-600 transition-colors duration-200 cursor-pointer"
                 type="button"
@@ -163,7 +226,7 @@ const Footer = () => {
                 Privacy Policy
               </button>
               <span className="text-gray-300">•</span>
-              <button 
+              <button
                 onClick={() => handleInternalLink('/cookie-policy')}
                 className="text-gray-500 hover:text-red-600 transition-colors duration-200 cursor-pointer"
                 type="button"
